@@ -102,13 +102,28 @@ const components: { title: string; href: string; description: string }[] = [
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleScroll = () => {
+    if (window.scrollY > 0) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+  };
+
   return (
-    <header className="">
+    <header
+      className={`z-50 sticky top-0 transition-colors duration-300 ${
+        isScrolled ? "bg-white dark:bg-black" : "bg-transparent"
+      }`}
+    >
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
